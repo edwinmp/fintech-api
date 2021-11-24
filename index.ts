@@ -1,9 +1,8 @@
 import express, { Application, Request, Response } from 'express';
 import db from './db';
-import { validateAPYRequest } from './db/manage/apy';
+import { createAPYCalculation, validateAPYRequest } from './db/manage';
 import { getCustomerById } from './db/manage/customer';
 import { APYCalculation } from './utils';
-import { calculateAPY } from './utils/math';
 
 const app: Application = express();
 const port = 3000;
@@ -23,12 +22,18 @@ app.post('/apy/:customerId', async (req: Request, res: Response): Promise<Respon
     return res.status(400).send({ error });
   }
   if (customer) {
-    const validationError = validateAPYRequest({ ...body, customer_id: parseInt(customerId) });
+    const apy: APYCalculation = { ...body, customer_id: parseInt(customerId) };
+    const validationError = validateAPYRequest(apy);
     if (validationError) {
       return res.status(401).send({ error: validationError });
     }
+    const { data: calculation, error: apyError } = await createAPYCalculation(db, apy);
 
-    return res.status(200).send({ ...customer, value: calculateAPY(body) });
+    if (apyError) {
+      return res.status(400).send({ error: apyError });
+    }
+
+    return res.status(200).send(calculation);
   } else {
     return res.status(401).send({ error: 'invalid customer id' });
   }

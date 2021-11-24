@@ -1,9 +1,9 @@
 import { Database } from 'sqlite3';
-import { Customer, DatabaseManagerResponse } from '../../utils';
+import { Customer, ManagerResponse } from '../../utils';
 
 const CUSTOMER_DATABASE = 'Customer';
 
-export const getCustomerById = (db: Database, customerId: number): Promise<DatabaseManagerResponse<Customer>> =>
+export const getCustomerById = (db: Database, customerId: number): Promise<ManagerResponse<Customer>> =>
   new Promise((resolve, reject) => {
     db.serialize(() => {
       db.get(`SELECT * from ${CUSTOMER_DATABASE} where customer_id=${customerId}`, function (err, row) {

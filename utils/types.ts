@@ -13,7 +13,7 @@ export interface APYCalculation {
   created_at: string;
 }
 
-export interface DatabaseManagerResponse<T> {
+export interface ManagerResponse<T> {
   error?: string;
   data?: T;
 }
