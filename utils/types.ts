@@ -4,4 +4,7 @@ export interface Customer {
   created_at: string;
 }
 
-// export interface ValidationError
+export interface DatabaseManagerResponse<T> {
+  error?: string;
+  data?: T;
+}
