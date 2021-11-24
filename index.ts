@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from 'express';
-import db from './connection';
+import db from './db';
 
 console.log(db);
 
