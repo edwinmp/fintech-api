@@ -3,6 +3,7 @@ import db from './db';
 import { validateAPYRequest } from './db/manage/apy';
 import { getCustomerById } from './db/manage/customer';
 import { APYCalculation } from './utils';
+import { calculateAPY } from './utils/math';
 
 const app: Application = express();
 const port = 3000;
@@ -27,7 +28,7 @@ app.post('/apy/:customerId', async (req: Request, res: Response): Promise<Respon
       return res.status(401).send({ error: validationError });
     }
 
-    return res.status(200).send(customer);
+    return res.status(200).send({ ...customer, value: calculateAPY(body) });
   } else {
     return res.status(401).send({ error: 'invalid customer id' });
   }
