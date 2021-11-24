@@ -1,6 +1,7 @@
 import { Database } from 'sqlite3';
-import { APYCalculation, Customer, ManagerResponse } from '../../utils';
+import { APYCalculation, ManagerResponse } from '../../utils';
 import { calculateAPY } from '../../utils/math';
+import { clearCache, getCachedData, hasCache, updateCache } from '../cache';
 
 const APY_DATABASE = 'APYCalculation';
 
@@ -36,18 +37,37 @@ export const createAPYCalculation = (db: Database, apy: APYCalculation): Promise
         }
         console.log(`Successful creation of APY Calculation ${this.lastID}`);
 
+        // clear cache, if exists
+        const historyQuery = getCustomerAPYCalculationsQuery(customer_id);
+        if (hasCache(historyQuery)) {
+          clearCache(historyQuery);
+        }
+
         resolve({ data: { apy: value } });
       });
     });
   });
+
+export const getCustomerAPYCalculationsQuery = (customerId: number) => {
+  return `SELECT * from ${APY_DATABASE} where customer_id=${customerId}`;
+};
 
 export const getCustomerAPYCalculations = (
   db: Database,
   customerId: number,
 ): Promise<ManagerResponse<APYCalculation[]>> =>
   new Promise((resolve, reject) => {
+    const query = getCustomerAPYCalculationsQuery(customerId);
+    // check cache
+    if (hasCache(query)) {
+      const data = getCachedData<APYCalculation[]>(query);
+      resolve({ data });
+
+      return;
+    }
+
     db.serialize(() => {
-      db.all(`SELECT * from ${APY_DATABASE} where customer_id=${customerId}`, function (err, rows) {
+      db.all(query, function (err, rows) {
         if (err) {
           console.error(err.message);
           reject({ error: err.message });
@@ -55,6 +75,7 @@ export const getCustomerAPYCalculations = (
           return;
         }
 
+        updateCache(query, rows);
         resolve({ data: rows });
       });
     });
