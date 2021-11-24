@@ -1,0 +1,13 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "newline-before-return": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+  }
+}
