@@ -1,6 +1,7 @@
 // setup database table with initial data
 
 import { Database } from 'sqlite3';
+import { createCustomer } from './manage/customer';
 
 const setupDatabase = (db: Database) => {
   const queryCreateCustomerTable = `CREATE TABLE IF NOT EXISTS Customer (
@@ -23,6 +24,13 @@ const setupDatabase = (db: Database) => {
       return console.error(err.message);
     }
     console.log("Successful creation of the 'Customer' table");
+    createCustomer(db, { customer_id: 1, name: 'admin' })
+      .then(() => {
+        console.log('Customer Created!');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
   db.run(queryCreateAPYCalculationTable, (err) => {
     if (err) {
