@@ -1,6 +1,8 @@
 import express, { Application, Request, Response } from 'express';
 import db from './db';
+import { validateAPYRequest } from './db/manage/apy';
 import { getCustomerById } from './db/manage/customer';
+import { APYCalculation } from './utils';
 
 const app: Application = express();
 const port = 3000;
@@ -9,8 +11,10 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/apy/:customerId', async (req: Request, res: Response): Promise<Response> => {
+app.post('/apy/:customerId', async (req: Request, res: Response): Promise<Response> => {
   const { customerId } = req.params;
+  const body = req.body as APYCalculation;
+
   const { data: customer, error } = await getCustomerById(db, parseInt(customerId));
   if (error) {
     console.log(error);
@@ -18,7 +22,10 @@ app.get('/apy/:customerId', async (req: Request, res: Response): Promise<Respons
     return res.status(400).send({ error });
   }
   if (customer) {
-    // TODO: user exists
+    const validationError = validateAPYRequest({ ...body, customer_id: parseInt(customerId) });
+    if (validationError) {
+      return res.status(401).send({ error: validationError });
+    }
 
     return res.status(200).send(customer);
   } else {

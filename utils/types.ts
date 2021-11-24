@@ -4,6 +4,15 @@ export interface Customer {
   created_at: string;
 }
 
+export interface APYCalculation {
+  customer_id: number;
+  deposit: number;
+  interest_rate: number;
+  yearly_compound_times: number;
+  value: number;
+  created_at: string;
+}
+
 export interface DatabaseManagerResponse<T> {
   error?: string;
   data?: T;
