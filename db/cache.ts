@@ -1,3 +1,8 @@
+/**
+ * Opted for LRU Cache
+ * It's simple, and gets the job done
+ */
+
 import LRU from 'lru-cache';
 
 const options = {
@@ -10,7 +15,7 @@ export const getCachedData = <T = unknown>(query: string): T => {
   return cache.get(query) as T;
 };
 
-export const updateCache = (query: string, data: any) => {
+export const updateCache = (query: string, data: unknown) => {
   cache.set(query, data);
 };
 
