@@ -36,7 +36,26 @@ export const createAPYCalculation = (db: Database, apy: APYCalculation): Promise
         }
         console.log(`Successful creation of APY Calculation ${this.lastID}`);
 
-        return { data: { apy: value } };
+        resolve({ data: { apy: value } });
+      });
+    });
+  });
+
+export const getCustomerAPYCalculations = (
+  db: Database,
+  customerId: number,
+): Promise<ManagerResponse<APYCalculation[]>> =>
+  new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.all(`SELECT * from ${APY_DATABASE} where customer_id=${customerId}`, function (err, rows) {
+        if (err) {
+          console.error(err.message);
+          reject({ error: err.message });
+
+          return;
+        }
+
+        resolve({ data: rows });
       });
     });
   });
