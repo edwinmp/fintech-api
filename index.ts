@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response } from 'express';
 
 const app: Application = express();
 const port = 3000;
@@ -7,19 +7,17 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(
-    "/",
-    async (req: Request, res: Response): Promise<Response> => {
-        return res.status(200).send({
-            message: "Setup Successful",
-        });
-    }
-);
+app.get('/', async (req: Request, res: Response): Promise<Response> => {
+  return res.status(200).send({
+    message: 'Setup Successful',
+  });
+});
 
 try {
-    app.listen(port, (): void => {
-        console.log(`Connected successfully on port ${port}`);
-    });
+  app.listen(port, (): void => {
+    console.log(`Connected successfully on port ${port}`);
+  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } catch (error: any) {
-    console.error(`Error occured: ${error.message}`);
+  console.error(`Error occured: ${error.message}`);
 }
