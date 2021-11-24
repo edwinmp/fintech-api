@@ -11,6 +11,39 @@ Fintech API
         docker-compose up -d --build
 
 
+### Endpoints
+
+Just the one, with different methods (GET, POST, DELETE). There's a few users in the SQLite DB
+
+        /apy/:userId
+
+With existing users:
+
+        http://localhost:3000/apy/1
+
+
+**Calculate APY**
+
+        POST http://localhost:3000/apy/1
+
+Request Body
+
+        {
+            "deposit": 10000,
+            "interest_rate": 0.5,
+            "yearly_compound_times": 12
+        }
+
+
+**Get Calculation History**
+
+        GET http://localhost:3000/apy/1
+
+
+**Delete all customer calculation history**
+
+        DELETE http://localhost:3000/apy/1
+
 ## Basic Testing with Jest
 
 Only tested the one function.
