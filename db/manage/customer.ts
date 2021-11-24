@@ -3,7 +3,7 @@ import { Customer } from '../../utils';
 
 export const createCustomer = (db: Database, { customer_id, name }: Partial<Customer>): Promise<string> =>
   new Promise((resolve, reject) => {
-    // validate
+    // TODO: validate
     if (!name) {
       reject('name is required');
     }

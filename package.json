@@ -38,6 +38,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "husky": "^7.0.4",
+    "numbers": "^0.7.0",
     "sqlite3": "^5.0.2"
   }
 }
