@@ -59,3 +59,20 @@ export const getCustomerAPYCalculations = (
       });
     });
   });
+
+export const deleteCustomerAPYCalculations = (db: Database, customerId: number): Promise<ManagerResponse<null>> =>
+  new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run(`DELETE from ${APY_DATABASE} where customer_id=${customerId}`, function (err) {
+        if (err) {
+          console.error(err.message);
+          reject({ error: err.message });
+
+          return;
+        }
+        console.log('Here...');
+
+        resolve({ data: null });
+      });
+    });
+  });
